@@ -12,7 +12,7 @@ export default function Dashboard() {
           title="Today's Orders"
           value="28"
           className="bg-blue-500 text-white text-right"
-         titleClassName="text-gray-500 text-white"
+          titleClassName="text-gray-500 text-white"
           valueClassName="text-2xl font-bold text-white"
           icon="lucide:notebook-pen"
           iconClassName="absolute top-5 left-5"
