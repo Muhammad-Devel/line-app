@@ -5,6 +5,7 @@ import AdminLayout from "../components/layout/AdminLayout";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Orders from "../pages/orders/Orders";
 import Queue from "../pages/queue/Queue";
+import Login from "../pages/auth/Login";
 
 // Keyin auth qo‘shiladi
 const isAuthenticated = true;
@@ -38,4 +39,8 @@ export const router = createBrowserRouter([
     path: "*",
     element: <Navigate to="/dashboard" />,
   },
+  {
+    path: "/login",
+    element: <Login />,
+  }
 ]);
