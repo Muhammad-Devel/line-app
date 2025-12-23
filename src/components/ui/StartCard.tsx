@@ -7,14 +7,16 @@ type Props = {
   titleClassName?: string;
   valueClassName?: string;
   icon?: string;
+  iconClassName?: string;
+  onClick?: () => void;
 };
 
-export function StatCard({ title, value, className, titleClassName, valueClassName, icon }: Props) {
+export function StatCard({ title, value, className, titleClassName, valueClassName, icon, iconClassName, onClick }: Props) {
 return (
-    <div className={`relative bg-white rounded-xl p-5 shadow ${className}`}>
-      {icon && <div className="absolute top-5 left-5"><AppIcon name={icon} className="w-12 h-12" /></div>}
-      <p className={`text-gray-500 ${titleClassName}`}>{title}</p>
-      <h2 className={`text-2xl font-bold ${valueClassName}`}>{value}</h2>
+    <div onClick={onClick} className={`relative bg-white rounded-xl p-5 shadow ${className}`}>
+      {icon && <div className={iconClassName}><AppIcon name={icon} className="w-12 h-12" /></div>}
+      <p className={titleClassName}>{title}</p>
+      <h2 className={valueClassName}>{value}</h2>
     </div>
   );
 }

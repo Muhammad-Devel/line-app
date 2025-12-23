@@ -12,25 +12,28 @@ export default function Dashboard() {
           title="Today's Orders"
           value="28"
           className="bg-blue-500 text-white text-right"
-          titleClassName="text-white"
-          valueClassName="text-white"
+         titleClassName="text-gray-500 text-white"
+          valueClassName="text-2xl font-bold text-white"
           icon="lucide:notebook-pen"
+          iconClassName="absolute top-5 left-5"
         />
         <StatCard
           title="Earnings"
           value="1,450,000 UZS"
           className="bg-green-500 text-white text-right"
-          titleClassName="text-white"
-          valueClassName="text-white"
+          titleClassName="text-gray-500 text-white"
+          valueClassName="text-2xl font-bold text-white"
           icon="lucide:wallet"
+          iconClassName="absolute top-5 left-5"
         />
         <StatCard
           title="Awaiting Queue"
           value="16"
           className="bg-yellow-500 text-white text-right"
-          titleClassName="text-white"
-          valueClassName="text-white"
+          titleClassName="text-gray-500 text-white"
+          valueClassName="text-2xl font-bold text-white"
           icon="lucide:clock-3"
+          iconClassName="absolute top-5 left-5"
         />
         <StatCard
           title="Pending Orders"
@@ -39,6 +42,7 @@ export default function Dashboard() {
           titleClassName="text-white"
           valueClassName="text-white"
           icon="lucide:package-check"
+          iconClassName="absolute top-5 left-5"
         />
       </div>
 

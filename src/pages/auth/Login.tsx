@@ -1,5 +1,5 @@
 import AppIcon from "../../components/ui/AppIcon";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 type Props = {};
 
