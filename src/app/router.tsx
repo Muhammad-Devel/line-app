@@ -7,6 +7,7 @@ import Orders from "../pages/orders/Orders";
 import Queue from "../pages/queue/Queue";
 import Login from "../pages/auth/Login";
 import AddBussiness from "../pages/auth/AddBussiness";
+import { Onboarding } from "../pages/auth/OnBoarding";
 
 // Keyin auth qo‘shiladi
 const isAuthenticated = true;
@@ -47,5 +48,9 @@ export const router = createBrowserRouter([
   {
     path: "/add-business",
     element: <AddBussiness />,
+  },
+  {
+    path: "/onboarding",
+    element: <Onboarding />,
   }
 ]);
