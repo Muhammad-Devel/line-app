@@ -10,7 +10,7 @@ function AddBussiness({}: Props) {
   return (
     <div className="flex items-center justify-center flex-col h-screen bg-zinc-50 space-y-8">
       <h1 className="text-3xl font-semibold">Sizning biznes yo'nalishingiz?</h1>
-      <div className="flex gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <StatCard
           title="Xizmat ko'rsatish"
           value="barber, avtousta, klinika, ..."
@@ -35,7 +35,7 @@ function AddBussiness({}: Props) {
         <StatCard
           title="Ikkalasi bittada"
           value="Xizmat va savdo"
-          className={`w-64 bg-white shadow-lg p-4 hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${selectedBusiness?.business_type === "HYBRID" ? "border-4 border-green-500" : ""}`}
+          className={`w-64 col-span-2 justify-self-center bg-white shadow-lg p-4 hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${selectedBusiness?.business_type === "HYBRID" ? "border-4 border-green-500" : ""}`}
           titleClassName="text-2xl text-center"
           valueClassName="text-sm text-gray-400 text-center"
           icon="mdi:store-cog"
