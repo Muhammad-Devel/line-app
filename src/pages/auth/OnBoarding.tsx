@@ -113,7 +113,7 @@ export const Onboarding = () => {
           </div>
           <h1 className="text-4xl font-black mb-2">Muvaffaqiyatli!</h1>
           <p className="text-gray-500 mb-8 text-lg">Line App tizimiga xush kelibsiz.</p>
-          <Button onClick={() => handleFinish} size="lg" className="px-12">
+          <Button onClick={handleFinish} size="lg" className="px-12">
             Dashboardga o'tish
           </Button>
         </div>
