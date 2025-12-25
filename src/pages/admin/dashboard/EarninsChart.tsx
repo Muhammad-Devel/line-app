@@ -1,29 +1,37 @@
 // src/pages/dashboard/EarningsChart.tsx
-import {
-  LineChart,
-  Line,
-  XAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-import { earningsData } from "./data";
+import { useEffect, useState } from 'react';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { statsService } from '../../../services/stats.service';
 
 export default function EarningsChart() {
-  return (
-    <div className="bg-white rounded-xl p-5 shadow">
-      <h3 className="font-semibold mb-4">Earnings Overview</h3>
+  const [data, setData] = useState([]);
 
-      <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={earningsData}>
-          <XAxis dataKey="day" />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="amount"
-            stroke="#22C55E"
+  useEffect(() => {
+    // Joriy yil va oy uchun oylik statistikani olish
+    const now = new Date();
+    statsService.getMonthly(now.getFullYear(), now.getMonth() + 1)
+      .then(res => setData(res.dailyBreakdown));
+  }, []);
+
+  return (
+    <div className="h-[250px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data}>
+          <XAxis dataKey="date" hide />
+          <YAxis hide />
+          <Tooltip 
+            labelFormatter={(label) => `Sana: ${new Date(label).toLocaleDateString()}`}
+            formatter={(value: any) => [`${value.toLocaleString()} UZS`, 'Tushum']}
+          />
+          <Area 
+            type="monotone" 
+            dataKey="totalRevenue" 
+            stroke="#4ade80" 
+            fill="#4ade80" 
+            fillOpacity={0.1} 
             strokeWidth={3}
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );

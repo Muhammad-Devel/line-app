@@ -7,84 +7,67 @@ import { CustomerStatus } from "../pages/client/Status";
 
 import Dashboard from "../pages/admin/dashboard/Dashboard";
 import Orders from "../pages/orders/Orders";
-import Queue from "../pages/queue/Queue";
+import { QueuePage } from "../pages/queue/Queue";
 import Login from "../pages/auth/Login";
 import AddBussiness from "../pages/auth/AddBussiness";
 import { Onboarding } from "../pages/auth/OnBoarding";
+import { MainDashboard } from "../pages/admin/dashboard/MainDashboard";
+import { AdminProducts } from "../pages/admin/dashboard/Products";
+// import { RetailPOS } from "../pages/admin/retail/RetailPOS"; // Yangi: Sotuv oynasi
 
-// Keyin auth qo‘shiladi
 const isAuthenticated = true;
 
 export const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/add-business",
-    element: <AddBussiness />,
-  },
-  {
-    path: "/onboarding",
-    element: <Onboarding />,
-  },
-  // Keyinchalik app ning bisnes egasi uchun routelari qo'shiladi
-  {
-    path: "/line-pro",
-    element: <Navigate to="/login" />,
-    children: [],
-  },
+  // --- AUTH YO'NALISHLARI ---
+  { path: "/login", element: <Login /> },
+  { path: "/add-business", element: <AddBussiness /> },
+  { path: "/onboarding", element: <Onboarding /> },
 
-  // Keyinchalik app ning mijozlari uchun routelari qo'shiladi
-  {
-    path: "/line-go",
-    element: <Navigate to="/login" />,
-    children: [],
-  },
-  // 2. ADMIN Yo'nalishi
+  // --- ADMIN YO'NALISHI (Desktop/Boshqaruv) ---
   {
     path: "/",
     element: isAuthenticated ? <AdminLayout /> : <Navigate to="/login" />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="/dashboard" />,
-      },
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "orders",
-        element: <Orders />,
-      },
-      {
-        path: "queue",
-        element: <Queue />,
-      },
+      { index: true, element: <Navigate to="/dashboard" /> },
+      { path: "dashboard", element: <Dashboard /> },
+      
+      // 🛒 RETAIL VA ORDERS
+      // { path: "pos", element: <RetailPOS /> }, // Yangi: Retail Sotuv oynasi
+      { path: "orders", element: <Orders /> }, // Buyurtmalar tarixi
+      
+      // 📦 MAHSULOTLAR VA XIZMATLAR
+      { path: "products", element: <AdminProducts /> },
+      
+      // 👥 SERVICE (Navbatlar)
+      { path: "queue", element: <QueuePage /> },
+      
+      // 🛠 MODULAR DASHBOARD
+      { path: "main-dashboard", element: <MainDashboard /> },
     ],
   },
 
-  // 3. CUSTOMER Yo'nalishi (Mobil ko'rinish uchun Layout)
+  // --- CUSTOMER YO'NALISHI (Mobil/Mijoz) ---
   {
-    path: "/c", // qisqa bo'lishi uchun (masalan: lineapp.uz/c/biznes-id)
+    path: "/c", 
     element: <CustomerLayout />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="home" />,
-      },
-      { path: ":businessId", element: <CustomerHome /> },
-      { path: "my-queue", element: <CustomerStatus /> },
+      { index: true, element: <Navigate to="home" /> },
+      { path: ":businessId", element: <CustomerHome /> }, // Menyu/Xizmatlar tanlash
+      { path: "my-queue", element: <CustomerStatus /> }, // Mijoz navbat statusi
+      { path: "cart", element: <div>Mijoz savati sahifasi</div> }, // Yangi: Retail mijoz uchun
     ],
   },
 
-  // // 4. Default yo'nalish
-  // { path: '*', element: <Navigate to="/login" replace /> },
-
-  // fallback
+  // --- LINE PRO & GO (Branding redirect) ---
   {
-    path: "*",
-    element: <Navigate to="/dashboard" />,
+    path: "/line-pro",
+    element: <Navigate to="/" />, // Admin panelga yo'naltirish
   },
+  {
+    path: "/line-go",
+    element: <Navigate to="/c/default" />, // Mijoz ilovasiga yo'naltirish
+  },
+
+  // Fallback
+  { path: "*", element: <Navigate to="/dashboard" /> },
 ]);
