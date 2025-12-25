@@ -1,5 +1,5 @@
 // src/pages/dashboard/Dashboard.tsx
-import { StatCard } from "../../components/ui/StartCard";
+import { StatCard } from "../../../components/ui/StartCard";
 import OrdersChart from "./OrdersChart";
 import EarningsChart from "./EarninsChart";
 // import type { BusinessType } from "../../types";
