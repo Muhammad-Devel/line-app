@@ -1,23 +1,28 @@
-// src/store/business.store.ts
 import { create } from 'zustand';
-
-export type BusinessType = 'SERVICE' | 'RETAIL' | 'HYBRID';
 
 interface BusinessState {
   step: number;
   config: {
-    type: BusinessType | null;
-    features: string[];
     name: string;
+    type: 'SERVICE' | 'RETAIL' | 'HYBRID' | null;
+    category: string;
+    features: string[];
   };
-  nextStep: () => void;
+  setStep: (step: number) => void;
   setBusinessConfig: (data: Partial<BusinessState['config']>) => void;
+  reset: () => void;
 }
 
 export const useBusinessStore = create<BusinessState>((set) => ({
   step: 1,
-  config: { type: null, features: [], name: '' },
-  nextStep: () => set((state) => ({ step: state.step + 1 })),
-  // setStep: (step) => set(() => ({ step })),
-  setBusinessConfig: (data) => set((state) => ({ config: { ...state.config, ...data } })),
+  config: {
+    name: '',
+    type: null,
+    category: '',
+    features: [],
+  },
+  setStep: (step) => set({ step }),
+  setBusinessConfig: (data) => 
+    set((state) => ({ config: { ...state.config, ...data } })),
+  reset: () => set({ step: 1, config: { name: '', type: null, category: '', features: [] } }),
 }));

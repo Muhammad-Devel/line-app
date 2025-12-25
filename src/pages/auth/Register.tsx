@@ -6,7 +6,7 @@ import AppIcon from "../../components/ui/AppIcon";
 import api from "../../services/api";
 
 interface RegisterProps {
-  onSuccess: () => void;
+  onSuccess: (step:number) => void;
 }
 
 export const Register: React.FC<RegisterProps> = ({onSuccess}) => {
@@ -33,7 +33,7 @@ export const Register: React.FC<RegisterProps> = ({onSuccess}) => {
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
         // Ro'yxatdan o'tgach, to'g'ridan-to'g'ri biznes sozlamalariga (Onboarding) o'tamiz
-       onSuccess();
+        onSuccess(2);
       }
     } catch (error) {
       console.error("Ro'yxatdan o'tishda xatolik:", error);
