@@ -1,8 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import AdminLayout from "../components/layout/AdminLayout";
+import { CustomerLayout } from "../components/layout/CustomerLayout";
+import { CustomerHome } from "../pages/client/Home";
+import { CustomerStatus } from "../pages/client/Status";
 
-import Dashboard from "../pages/dashboard/Dashboard";
+import Dashboard from "../pages/admin/dashboard/Dashboard";
 import Orders from "../pages/orders/Orders";
 import Queue from "../pages/queue/Queue";
 import Login from "../pages/auth/Login";
@@ -13,6 +16,32 @@ import { Onboarding } from "../pages/auth/OnBoarding";
 const isAuthenticated = true;
 
 export const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/add-business",
+    element: <AddBussiness />,
+  },
+  {
+    path: "/onboarding",
+    element: <Onboarding />,
+  },
+  // Keyinchalik app ning bisnes egasi uchun routelari qo'shiladi
+  {
+    path: "/line-pro",
+    element: <Navigate to="/login" />,
+    children: [],
+  },
+
+  // Keyinchalik app ning mijozlari uchun routelari qo'shiladi
+  {
+    path: "/line-go",
+    element: <Navigate to="/login" />,
+    children: [],
+  },
+  // 2. ADMIN Yo'nalishi
   {
     path: "/",
     element: isAuthenticated ? <AdminLayout /> : <Navigate to="/login" />,
@@ -36,21 +65,26 @@ export const router = createBrowserRouter([
     ],
   },
 
+  // 3. CUSTOMER Yo'nalishi (Mobil ko'rinish uchun Layout)
+  {
+    path: "/c", // qisqa bo'lishi uchun (masalan: lineapp.uz/c/biznes-id)
+    element: <CustomerLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="home" />,
+      },
+      { path: ":businessId", element: <CustomerHome /> },
+      { path: "my-queue", element: <CustomerStatus /> },
+    ],
+  },
+
+  // // 4. Default yo'nalish
+  // { path: '*', element: <Navigate to="/login" replace /> },
+
   // fallback
   {
     path: "*",
     element: <Navigate to="/dashboard" />,
   },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/add-business",
-    element: <AddBussiness />,
-  },
-  {
-    path: "/onboarding",
-    element: <Onboarding />,
-  }
 ]);
