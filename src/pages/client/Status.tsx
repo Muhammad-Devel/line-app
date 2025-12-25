@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import AppIcon from '../../components/ui/AppIcon';
@@ -6,12 +5,12 @@ import AppIcon from '../../components/ui/AppIcon';
 
 export const CustomerStatus = () => {
   // Bu ma'lumotlar aslida Socket.io yoki API dan keladi
-  const [queueInfo, setQueueInfo] = useState({
+  const queueInfo = {
     position: 3,
     totalAhead: 2,
     estimatedTime: 15, // daqiqa
     status: 'waiting' // 'waiting', 'calling', 'finished'
-  });
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
