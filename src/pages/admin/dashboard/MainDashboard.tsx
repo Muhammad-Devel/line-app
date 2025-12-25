@@ -1,7 +1,8 @@
 import { useBusinessStore } from '../../../store/business.store';
 import { QueueManager } from '../modules/QueueManager';
-import { PosTerminal } from '../modules/POSTerminal'
+
 import { StatsGrid } from '../../../components/ui/StatsGrid'
+import { PosTerminal } from '../modules/POSTerminal';
 
 export const MainDashboard = () => {
   const { config } = useBusinessStore();

@@ -40,7 +40,7 @@ export const CustomerStatus = () => {
     });
 
     // 5. Admin chaqirganda (Endpoint 18 mantiqi)
-    socket.on('queue:called', (data) => {
+    socket.on('queue:called', () => {
       if ("vibrate" in navigator) {
         navigator.vibrate([200, 100, 200, 100, 500]);
       }
