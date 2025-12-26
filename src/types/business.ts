@@ -15,6 +15,7 @@ export interface BusinessFeatures {
   hasBooking: boolean;
   hasCatalog: boolean;
   requiresStaff: boolean;
+  isMadeToOrder: boolean; // 👈 Yangi flag: Buyurtmaga tayyorlanadimi?
 }
 
 // 4. Konfiguratsiya (Record yordamida)
@@ -25,6 +26,7 @@ export const BUSINESS_CONFIG: Record<BusinessType, BusinessFeatures> = {
     hasBooking: true,
     hasCatalog: true,
     requiresStaff: true,
+    isMadeToOrder: false, // 👈 O'chirilgan
   },
   RETAIL: {
     hasQueue: false,
@@ -32,12 +34,14 @@ export const BUSINESS_CONFIG: Record<BusinessType, BusinessFeatures> = {
     hasBooking: false,
     hasCatalog: true,
     requiresStaff: false,
+    isMadeToOrder: false, // 👈 Qo'shildi
   },
-  HYBRID: {
+  HYBRID: { // Masalan, shirinlik tayyorlovchilar uchun
     hasQueue: true,
     hasProducts: true,
     hasBooking: true,
     hasCatalog: true,
     requiresStaff: false,
+    isMadeToOrder: true, // 👈 Faollashtirildi
   },
 };

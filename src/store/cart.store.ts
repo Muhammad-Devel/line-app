@@ -6,6 +6,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  note?: string; // Mijozning maxsus xohishi (masalan: "Happy Birthday Ali" deb yozilsin)
 }
 
 interface CartState {
