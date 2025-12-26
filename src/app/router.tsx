@@ -12,7 +12,7 @@ import Login from "../pages/auth/Login";
 import AddBussiness from "../pages/auth/AddBussiness";
 import { Onboarding } from "../pages/auth/OnBoarding";
 import { AdminProducts } from "../pages/admin/dashboard/Products";
-// import { RetailPOS } from "../pages/admin/retail/RetailPOS"; // Yangi: Sotuv oynasi
+import { RetailPOS } from "../pages/admin/retail/RetailPOS"; // Yangi: Sotuv oynasi
 
 const isAuthenticated = true;
 
@@ -29,29 +29,28 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/dashboard" /> },
       { path: "dashboard", element: <Dashboard /> },
-      
+
       // 🛒 RETAIL VA ORDERS
-      // { path: "pos", element: <RetailPOS /> }, // Yangi: Retail Sotuv oynasi
+      { path: "pos", element: <RetailPOS /> }, // Yangi: Retail Sotuv oynasi
       { path: "orders", element: <Orders /> }, // Buyurtmalar tarixi
-      
+
       // 📦 MAHSULOTLAR VA XIZMATLAR
       { path: "products", element: <AdminProducts /> },
-      
+
       // 👥 SERVICE (Navbatlar)
       { path: "queue", element: <QueuePage /> },
-      
     ],
   },
 
   // --- CUSTOMER YO'NALISHI (Mobil/Mijoz) ---
   {
-    path: "/c", 
+    path: "/c",
     element: <CustomerLayout />,
     children: [
       { index: true, element: <Navigate to="home" /> },
       { path: ":businessId", element: <CustomerHome /> }, // Menyu/Xizmatlar tanlash
       { path: "my-queue", element: <CustomerStatus /> }, // Mijoz navbat statusi
-      { path: "cart", element: <div>Mijoz savati sahifasi</div> }, // Yangi: Retail mijoz uchun
+      { path: "cart", element: <div>Mijozning savati</div> }, // Yangi: Retail mijoz uchun
     ],
   },
 
