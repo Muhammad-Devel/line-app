@@ -11,7 +11,6 @@ import { QueuePage } from "../pages/queue/Queue";
 import Login from "../pages/auth/Login";
 import AddBussiness from "../pages/auth/AddBussiness";
 import { Onboarding } from "../pages/auth/OnBoarding";
-import { MainDashboard } from "../pages/admin/dashboard/MainDashboard";
 import { AdminProducts } from "../pages/admin/dashboard/Products";
 // import { RetailPOS } from "../pages/admin/retail/RetailPOS"; // Yangi: Sotuv oynasi
 
@@ -41,8 +40,6 @@ export const router = createBrowserRouter([
       // 👥 SERVICE (Navbatlar)
       { path: "queue", element: <QueuePage /> },
       
-      // 🛠 MODULAR DASHBOARD
-      { path: "main-dashboard", element: <MainDashboard /> },
     ],
   },
 

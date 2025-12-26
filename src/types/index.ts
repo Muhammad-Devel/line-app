@@ -9,3 +9,11 @@ export type BusinessConfig = {
    category: string;
    features: string[];
 };
+
+export type BusinessSettings = {
+   timezone: string;
+   currency: string;
+   tax_rate: number;
+   notifications_enabled: boolean;
+};
+
