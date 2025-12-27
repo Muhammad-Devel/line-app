@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '../store/auth.store';
 // import { useBusinessStore } from '../store/business.store';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.lineapp.uz/v1';
@@ -11,13 +12,15 @@ const api = axios.create({
 });
 
 // So'rov yuborishdan oldin tokenni qo'shish (Interceptor)
+
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = useAuthStore.getState().token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
+
 
 // ASOSIY API FUNKSIYALARI
 export const businessService = {

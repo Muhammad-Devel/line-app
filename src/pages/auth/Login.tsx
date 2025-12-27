@@ -1,3 +1,5 @@
+
+
 import axios from "axios";
 import AppIcon from "../../components/ui/AppIcon";
 import { useState } from "react";
@@ -31,7 +33,7 @@ function Login() {
     } else {
       // 2. Agar foydalanuvchi oddiy brauzerda bo'lsa, botga yo'naltiramiz
       // Bu yerda botingizning linkini yozasiz
-      window.location.href = "https://t.me/line_app_bot?start=login";
+      window.location.href = "https://t.me/line_app_bot?start=start";
     }
     setLoading(false);
   };
