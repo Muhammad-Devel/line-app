@@ -13,12 +13,14 @@ import AddBussiness from "../pages/auth/AddBussiness";
 import { Onboarding } from "../pages/auth/OnBoarding";
 import { AdminProducts } from "../pages/admin/dashboard/Products";
 import { RetailPOS } from "../pages/admin/retail/RetailPOS"; // Yangi: Sotuv oynasi
+import { TelegramAuth } from "../pages/auth/TelegramLogin";
 
 const isAuthenticated = true;
 
 export const router = createBrowserRouter([
   // --- AUTH YO'NALISHLARI ---
   { path: "/login", element: <Login /> },
+  { path: "/telegram", element: <TelegramAuth /> },
   { path: "/add-business", element: <AddBussiness /> },
   { path: "/onboarding", element: <Onboarding /> },
 
