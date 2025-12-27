@@ -1,10 +1,7 @@
-
-type Props = {}
+type Props = {};
 
 function Orders({}: Props) {
-  return (
-    <div>Orders</div>
-  )
+  return <div>Orders</div>;
 }
 
-export default Orders
+export default Orders;

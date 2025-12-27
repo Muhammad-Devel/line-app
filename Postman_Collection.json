@@ -1,0 +1,847 @@
+{
+  "info": {
+    "_postman_id": "line-app-api-collection-v2",
+    "name": "Line App API - Queue Management (Enhanced Auth)",
+    "description": "Queue Management Backend API with enhanced authentication (password, verification codes, Telegram bot)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "line-app-api"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://line-app-api.onrender.com/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Request Verification Code",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+998901234567\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/request-code",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "request-code"]
+            },
+            "description": "Telefon raqam orqali 4 xonali tasdiqlash kodi so'rash. Kod Telegram bot orqali yuboriladi."
+          },
+          "response": []
+        },
+        {
+          "name": "Register (with Code + Password)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+998901234567\",\n  \"code\": \"1234\",\n  \"name\": \"John Doe\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Verification code va parol bilan ro'yxatdan o'tish. Avval /auth/request-code orqali kod oling."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+998901234567\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Telefon raqam va parol bilan login qilish. Har safar yangi token qaytariladi."
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"password123\",\n  \"newPassword\": \"newpassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/change-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "change-password"]
+            },
+            "description": "Parolni o'zgartirish. Authentication kerak."
+          },
+          "response": []
+        },
+        {
+          "name": "Telegram Authentication",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 123456789,\n  \"first_name\": \"John\",\n  \"username\": \"johndoe\",\n  \"hash\": \"telegram_auth_hash\",\n  \"auth_date\": 1234567890\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/telegram",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "telegram"]
+            },
+            "description": "Telegram Web App orqali avtorizatsiya"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Joriy foydalanuvchi ma'lumotlarini olish"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "John Doe",
+                  "type": "text",
+                  "description": "Name (optional)"
+                },
+                {
+                  "key": "phone",
+                  "value": "+998901234567",
+                  "type": "text",
+                  "description": "Phone (optional)"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": [],
+                  "description": "Profile image (optional)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "profile"]
+            },
+            "description": "User profilini yangilash (name, phone, image). Rasm yuklash mumkin."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Client APIs",
+      "item": [
+        {
+          "name": "Get Products",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/client/products",
+              "host": ["{{base_url}}"],
+              "path": ["client", "products"]
+            },
+            "description": "Barcha faol mahsulotlar/xizmatlar ro'yxati"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"507f1f77bcf86cd799439011\",\n      \"quantity\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/client/orders",
+              "host": ["{{base_url}}"],
+              "path": ["client", "orders"]
+            },
+            "description": "Yangi buyurtma yaratish"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/client/orders",
+              "host": ["{{base_url}}"],
+              "path": ["client", "orders"]
+            },
+            "description": "Mijozning barcha buyurtmalari"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/client/orders/:id",
+              "host": ["{{base_url}}"],
+              "path": ["client", "orders", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "507f1f77bcf86cd799439013"
+                }
+              ]
+            },
+            "description": "Buyurtma tafsilotlari"
+          },
+          "response": []
+        },
+        {
+          "name": "Join Queue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceId\": \"507f1f77bcf86cd799439011\",\n  \"orderId\": \"507f1f77bcf86cd799439013\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/client/queue",
+              "host": ["{{base_url}}"],
+              "path": ["client", "queue"]
+            },
+            "description": "Navbatga yozilish"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Queue Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/client/queue/status",
+              "host": ["{{base_url}}"],
+              "path": ["client", "queue", "status"]
+            },
+            "description": "Mijozning navbat holati"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin APIs",
+      "item": [
+        {
+          "name": "Orders",
+          "item": [
+            {
+              "name": "Get All Orders",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/admin/orders?status=pending&page=1&limit=20",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "orders"],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "pending",
+                      "description": "pending, processing, completed, cancelled"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ]
+                },
+                "description": "Barcha buyurtmalar ro'yxati"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Order Status",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"completed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/admin/orders/:id",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "orders", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "507f1f77bcf86cd799439013"
+                    }
+                  ]
+                },
+                "description": "Buyurtma holatini yangilash"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Products",
+          "item": [
+            {
+              "name": "Get All Products",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/admin/products",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "products"]
+                },
+                "description": "Barcha mahsulotlar ro'yxati"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Product",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "Soch olish",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description",
+                      "value": "Erkaklar uchun soch olish xizmati",
+                      "type": "text"
+                    },
+                    {
+                      "key": "price",
+                      "value": "50000",
+                      "type": "text"
+                    },
+                    {
+                      "key": "duration",
+                      "value": "30",
+                      "type": "text"
+                    },
+                    {
+                      "key": "category",
+                      "value": "Haircut",
+                      "type": "text"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "true",
+                      "type": "text"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": [],
+                      "description": "Product image (optional)"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/admin/products",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "products"]
+                },
+                "description": "Yangi mahsulot yaratish (rasm bilan birga)"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Product",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "Soch olish (Premium)",
+                      "type": "text",
+                      "description": "Name (optional)"
+                    },
+                    {
+                      "key": "price",
+                      "value": "60000",
+                      "type": "text",
+                      "description": "Price (optional)"
+                    },
+                    {
+                      "key": "isActive",
+                      "value": "true",
+                      "type": "text",
+                      "description": "Is Active (optional)"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": [],
+                      "description": "Product image (optional)"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/admin/products/:id",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "products", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "507f1f77bcf86cd799439011"
+                    }
+                  ]
+                },
+                "description": "Mahsulotni yangilash (rasm bilan birga)"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Product",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/admin/products/:id",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "products", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "507f1f77bcf86cd799439011"
+                    }
+                  ]
+                },
+                "description": "Mahsulotni o'chirish"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Queue",
+          "item": [
+            {
+              "name": "Get Queue List",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/admin/queue?status=waiting&serviceId=",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "queue"],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "waiting",
+                      "description": "waiting, called, completed, skipped"
+                    },
+                    {
+                      "key": "serviceId",
+                      "value": "",
+                      "description": "Service ID (optional)"
+                    }
+                  ]
+                },
+                "description": "Navbatlar ro'yxati"
+              },
+              "response": []
+            },
+            {
+              "name": "Add Client to Queue",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"507f1f77bcf86cd799439011\",\n  \"serviceId\": \"507f1f77bcf86cd799439011\",\n  \"orderId\": \"507f1f77bcf86cd799439013\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/admin/queue",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "queue"]
+                },
+                "description": "Qo'lda mijozni navbatga qo'shish"
+              },
+              "response": []
+            },
+            {
+              "name": "Call Client",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/admin/queue/:id/call",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "queue", ":id", "call"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "507f1f77bcf86cd799439014"
+                    }
+                  ]
+                },
+                "description": "Mijozni chaqirish"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Queue Status",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"completed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/admin/queue/:id/status",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "queue", ":id", "status"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "507f1f77bcf86cd799439014"
+                    }
+                  ]
+                },
+                "description": "Navbat holatini yangilash"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Statistics",
+          "item": [
+            {
+              "name": "Get Daily Statistics",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/admin/statistics/daily?date=2024-01-01",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "statistics", "daily"],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-01-01",
+                      "description": "YYYY-MM-DD format (optional, default: today)"
+                    }
+                  ]
+                },
+                "description": "Kunlik statistika"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Monthly Statistics",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/admin/statistics/monthly?year=2024&month=1",
+                  "host": ["{{base_url}}"],
+                  "path": ["admin", "statistics", "monthly"],
+                  "query": [
+                    {
+                      "key": "year",
+                      "value": "2024",
+                      "description": "Year (optional, default: current year)"
+                    },
+                    {
+                      "key": "month",
+                      "value": "1",
+                      "description": "Month 1-12 (optional, default: current month)"
+                    }
+                  ]
+                },
+                "description": "Oylik statistika"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
