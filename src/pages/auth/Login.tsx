@@ -65,7 +65,7 @@ function Login() {
       alert("Siz allaqachon Telegram Mini App ichidasiz");
     } else {
       // Oddiy brauzerda bo'lsa botga yuboramiz
-      window.location.href = "https://t.me/line_app_bot?start=auth";
+      window.location.href = "https://t.me/line_app_bot?start=start";
     }
   };
 
