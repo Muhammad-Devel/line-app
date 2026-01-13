@@ -1,5 +1,5 @@
-import { Card } from '../../../components/ui/Card';
-import { DashboardSummary } from './DashboardSummary';
+import { Card } from "../../../components/ui/Card";
+import { DashboardSummary } from "./DashboardSummary";
 
 export default function Dashboard() {
   return (
@@ -10,43 +10,50 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* 2. Katta Grafik (OrdersChart) */}
         <div className="lg:col-span-2">
-           <Card className="p-8 border-none shadow-sm bg-white rounded-[32px] h-full">
-              <div className="flex justify-between items-center mb-8">
-                 <div>
-                    <h3 className="text-lg font-bold text-slate-800">Buyurtmalar oqimi</h3>
-                    <p className="text-xs text-slate-400">Oxirgi 7 kundagi ko'rsatkichlar</p>
-                 </div>
-                 {/* Filter tugmalari bo'lishi mumkin */}
+          <Card className="p-8 border-none shadow-sm bg-white rounded-[32px] h-full">
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h3 className="text-lg font-bold text-slate-800">
+                  Buyurtmalar oqimi
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Oxirgi 7 kundagi ko'rsatkichlar
+                </p>
               </div>
-              <div className="h-[300px]">
-                 {/* Bu yerda OrdersChart komponenti bo'ladi */}
-              </div>
-           </Card>
+              {/* Filter tugmalari bo'lishi mumkin */}
+            </div>
+            <div className="h-[300px]">
+              {/* Bu yerda OrdersChart komponenti bo'ladi */}
+            </div>
+          </Card>
         </div>
 
         {/* 3. Eng ko'p sotilayotganlar (Top Services) */}
         <div className="lg:col-span-1">
-           <Card className="p-8 border-none shadow-sm bg-white rounded-[32px] h-full">
-              <h3 className="text-lg font-bold text-slate-800 mb-6">Top Xizmatlar</h3>
-              <div className="space-y-6">
-                 {/* Dinamik ro'yxat */}
-                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center font-bold text-slate-400">1</div>
-                    <div className="flex-1">
-                       <p className="text-sm font-bold text-slate-800">Soch olish</p>
-                       <p className="text-[10px] text-slate-400">128 ta buyurtma</p>
-                    </div>
-                    <p className="text-sm font-black text-blue-600">45%</p>
-                 </div>
-                 {/* Boshqa qatorlar... */}
+          <Card className="p-8 border-none shadow-sm bg-white rounded-[32px] h-full">
+            <h3 className="text-lg font-bold text-slate-800 mb-6">
+              Top Xizmatlar
+            </h3>
+            <div className="space-y-6">
+              {/* Dinamik ro'yxat */}
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center font-bold text-slate-400">
+                  1
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-slate-800">Soch olish</p>
+                  <p className="text-[10px] text-slate-400">128 ta buyurtma</p>
+                </div>
+                <p className="text-sm font-black text-blue-600">45%</p>
               </div>
-           </Card>
+              {/* Boshqa qatorlar... */}
+            </div>
+          </Card>
         </div>
       </div>
     </div>
   );
 }
-
 
 // // src/pages/dashboard/Dashboard.tsx
 // import { useEffect, useState } from "react";

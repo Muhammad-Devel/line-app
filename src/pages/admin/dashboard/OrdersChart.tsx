@@ -1,11 +1,5 @@
 // src/pages/dashboard/OrdersChart.tsx
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { ordersData } from "./data";
 
 export default function OrdersChart() {

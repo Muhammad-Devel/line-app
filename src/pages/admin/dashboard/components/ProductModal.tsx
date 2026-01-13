@@ -1,12 +1,18 @@
 // src/pages/admin/dashboard/components/ProductModal.tsx
-import { useForm } from 'react-hook-form';
-import api from '../../../../services/api';
-import AppIcon from '../../../../components/ui/AppIcon';
-import { Button } from '../../../../components/ui/Button';
+import { useForm } from "react-hook-form";
+import api from "../../../../services/api";
+import AppIcon from "../../../../components/ui/AppIcon";
+import { Button } from "../../../../components/ui/Button";
 
 export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
   const { register, handleSubmit, reset } = useForm({
-    values: product || { name: '', price: 0, stock: 0, category: '', isActive: true }
+    values: product || {
+      name: "",
+      price: 0,
+      stock: 0,
+      category: "",
+      isActive: true,
+    },
   });
 
   if (!isOpen) return null;
@@ -18,7 +24,7 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
         await api.put(`/admin/products/${product._id}`, data);
       } else {
         // Endpoint 13: Create
-        await api.post('/admin/products', data);
+        await api.post("/admin/products", data);
       }
       onRefresh();
       onClose();
@@ -35,30 +41,57 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
           <h2 className="text-xl font-black text-slate-800">
             {product ? "Mahsulotni tahrirlash" : "Yangi mahsulot"}
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><AppIcon name="lucide:x" /></button>
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-600"
+          >
+            <AppIcon name="lucide:x" />
+          </button>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 space-y-1">
-              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">Nomi</label>
-              <input {...register('name')} className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold" />
-            </div>
-            
-            <div className="space-y-1">
-              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">Narxi (UZS)</label>
-              <input type="number" {...register('price')} className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold" />
+              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                Nomi
+              </label>
+              <input
+                {...register("name")}
+                className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
+              />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">Ombor qoldig'i</label>
-              <input type="number" {...register('stock')} className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold" />
+              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                Narxi (UZS)
+              </label>
+              <input
+                type="number"
+                {...register("price")}
+                className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                Ombor qoldig'i
+              </label>
+              <input
+                type="number"
+                {...register("stock")}
+                className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
+              />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-[10px] font-black text-slate-400 uppercase ml-2">Kategoriya</label>
-            <select {...register('category')} className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold appearance-none">
+            <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+              Kategoriya
+            </label>
+            <select
+              {...register("category")}
+              className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold appearance-none"
+            >
               <option value="ichimliklar">Ichimliklar</option>
               <option value="ovqatlar">Ovqatlar</option>
               <option value="shirinliklar">Shirinliklar</option>

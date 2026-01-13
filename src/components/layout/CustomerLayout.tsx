@@ -1,15 +1,27 @@
-import { Outlet } from 'react-router-dom';
-import { Link, useLocation } from 'react-router-dom';
-import AppIcon from '../ui/AppIcon';
+import { Outlet } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import AppIcon from "../ui/AppIcon";
 
 export const CustomerLayout = () => {
   const location = useLocation();
 
   const navItems = [
-    { icon: <AppIcon name="lucide:home" />, label: 'Asosiy', path: '/c/home' },
-    { icon: <AppIcon name="lucide:clock" />, label: 'Navbatim', path: '/c/my-queue' },
-    { icon: <AppIcon name="lucide:shopping-bag" />, label: 'Katalog', path: '/c/catalog' },
-    { icon: <AppIcon name="lucide:user" />, label: 'Profil', path: '/c/profile' },
+    { icon: <AppIcon name="lucide:home" />, label: "Asosiy", path: "/c/home" },
+    {
+      icon: <AppIcon name="lucide:clock" />,
+      label: "Navbatim",
+      path: "/c/my-queue",
+    },
+    {
+      icon: <AppIcon name="lucide:shopping-bag" />,
+      label: "Katalog",
+      path: "/c/catalog",
+    },
+    {
+      icon: <AppIcon name="lucide:user" />,
+      label: "Profil",
+      path: "/c/profile",
+    },
   ];
 
   return (
@@ -32,10 +44,12 @@ export const CustomerLayout = () => {
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
-            <Link 
-              key={item.path} 
-              to={item.path} 
-              className={`flex flex-col items-center space-y-1 transition-all ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400'}`}
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex flex-col items-center space-y-1 transition-all ${
+                isActive ? "text-blue-600 scale-110" : "text-slate-400"
+              }`}
             >
               {item.icon}
               <span className="text-[10px] font-medium">{item.label}</span>
