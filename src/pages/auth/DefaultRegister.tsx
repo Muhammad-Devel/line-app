@@ -3,7 +3,10 @@ import {  Link } from "react-router-dom";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import AppIcon from "../../components/ui/AppIcon";
-import api from "../../services/api";
+import VerifyCode from "../../components/ui/VerifyCode";
+import RequestCode from "../../components/ui/RequestCode";
+import { register } from "../../services/auth.service";
+
 
 interface RegisterProps {
  
@@ -11,11 +14,13 @@ interface RegisterProps {
 
 export const DefaultRegister: React.FC<RegisterProps> = () => {
 //   const navigate = useNavigate();
+  const [step, setStep] = useState("request")
   const [loading, setLoading] = useState(false);
   const [eye, setEye] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
+    code:"",
     password: '',
   });
 
@@ -31,6 +36,14 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
     }
   };
 
+  const handleCodeChange = (code: string) => {
+  setFormData((prev) => ({
+    ...prev,
+    code,
+  }));
+};
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -38,10 +51,12 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    console.log(formData);
+    
 
     try {
       // API ga yuborish
-      const response = await api.post("/auth/register", formData);
+      const response = await register(formData);
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
@@ -55,6 +70,16 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
       setLoading(false);
     }
   };
+
+  if (step === "request") {
+    return <RequestCode
+  onSuccess={(phone) => {
+    setFormData(prev => ({ ...prev, phone }));
+    setStep("verify");
+  }}
+/>
+  }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
@@ -124,6 +149,11 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
               />
                 </button>
             </span>
+          </div>
+
+          <div>
+            <VerifyCode onChange={handleCodeChange} />
+
           </div>
 
           <div>

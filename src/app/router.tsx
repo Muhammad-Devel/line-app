@@ -13,7 +13,7 @@ import AddBussiness from "../pages/auth/AddBussiness";
 import { Onboarding } from "../pages/auth/OnBoarding";
 import { AdminProducts } from "../pages/admin/dashboard/Products";
 import { RetailPOS } from "../pages/admin/retail/RetailPOS"; // Yangi: Sotuv oynasi
-import { TelegramAuth } from "../pages/auth/TelegramLogin";
+import { TelegramLogin } from "../pages/auth/TelegramLogin";
 import { DefaultRegister } from "../pages/auth/DefaultRegister";
 
 const isAuthenticated = true;
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
   // --- AUTH YO'NALISHLARI ---
   { path: "/login", element: <Login /> },
   { path: "/register", element: <DefaultRegister /> },
-  { path: "/telegram", element: <TelegramAuth /> },
+  { path: "/telegram", element: <TelegramLogin /> },
   { path: "/add-business", element: <AddBussiness /> },
   { path: "/onboarding", element: <Onboarding /> },
 

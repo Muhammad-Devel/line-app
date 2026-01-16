@@ -1,7 +1,7 @@
-import axios from "axios";
 import AppIcon from "../../components/ui/AppIcon";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../services/auth.service";
 // import { TelegramAuth } from "./TelegramLogin"; // Bu brauzer uchun widget
 
 function Login() {
@@ -13,41 +13,19 @@ function Login() {
     password: "",
   });
 
-  // 1. Sahifa yuklanganda agar foydalanuvchi Telegram Mini App ichida bo'lsa,
-  // avtomatik login qilishga urinib ko'ramiz.
-  useEffect(() => {
-    const checkMiniAppAuth = async () => {
-      const tg = (window as any).Telegram?.WebApp;
-      if (tg && tg.initData && tg.initData !== "") {
-        setLoading(true);
-        try {
-          const response = await axios.post("/auth/telegram-miniapp", {
-            initData: tg.initData,
-          });
-          if (response.data.token) {
-            localStorage.setItem("token", response.data.token);
-            navigate("/onboarding");
-          }
-        } catch (error) {
-          console.error("Mini App login xatosi:", error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-    checkMiniAppAuth();
-  }, [navigate]);
-
   // Oddiy forma orqali kirish
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("/auth/login", formData);
+      const res = await login(formData);
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
-    } catch (err) {
-      alert("Telefon yoki parol noto'g'ri");
+    } catch (err:any) {
+      alert(
+        "Telefon yoki parol noto'g'ri" + " " + err.response?.data?.error || ""
+      );
+      console.log("Login xatosi:", err.response || err);
     } finally {
       setLoading(false);
     }
