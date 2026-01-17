@@ -2,16 +2,27 @@ import AppIcon from "../../components/ui/AppIcon";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/auth.service";
+import { useAuthStore } from "../../store/auth.store";
+import { roleRedirect } from "../../utils/roleRedirect";
 // import { TelegramAuth } from "./TelegramLogin"; // Bu brauzer uchun widget
 
 function Login() {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [eye, setEye] = useState(false);
   const [formData, setFormData] = useState({
     phone: "",
     password: "",
   });
+  
+  
+  const navigate = useNavigate();
+  const authStore = useAuthStore((state) => state);
+
+  // Muvaffaqiyatli logindan so'ng
+  const handleLoginSuccess = (res:any) => {
+    authStore.setAuth(res.data.token, res.data.user);
+    navigate(roleRedirect(res.data.user.role), { replace: true });
+  }
 
   // Oddiy forma orqali kirish
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,8 +30,7 @@ function Login() {
     setLoading(true);
     try {
       const res = await login(formData);
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
+      handleLoginSuccess(res);
     } catch (err:any) {
       alert(
         "Telefon yoki parol noto'g'ri" + " " + err.response?.data?.error || ""
