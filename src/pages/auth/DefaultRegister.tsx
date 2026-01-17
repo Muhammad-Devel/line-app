@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import AppIcon from "../../components/ui/AppIcon";
@@ -7,24 +7,21 @@ import VerifyCode from "../../components/ui/VerifyCode";
 import RequestCode from "../../components/ui/RequestCode";
 import { register } from "../../services/auth.service";
 
-
-interface RegisterProps {
- 
-}
+interface RegisterProps {}
 
 export const DefaultRegister: React.FC<RegisterProps> = () => {
-//   const navigate = useNavigate();
-  const [step, setStep] = useState("request")
+  //   const navigate = useNavigate();
+  const [step, setStep] = useState("request");
   const [loading, setLoading] = useState(false);
   const [eye, setEye] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    code:"",
-    password: '',
+    code: "",
+    password: "",
   });
 
-   // Telegram tugmasi bosilganda (Brauzerda bo'lsa botga, Mini Appda bo'lsa tg ichiga)
+  // Telegram tugmasi bosilganda (Brauzerda bo'lsa botga, Mini Appda bo'lsa tg ichiga)
   const handleTelegramButtonClick = () => {
     const tg = (window as any).Telegram?.WebApp;
     if (tg && tg.initData && tg.initData !== "") {
@@ -37,12 +34,11 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
   };
 
   const handleCodeChange = (code: string) => {
-  setFormData((prev) => ({
-    ...prev,
-    code,
-  }));
-};
-
+    setFormData((prev) => ({
+      ...prev,
+      code,
+    }));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,7 +48,6 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
     e.preventDefault();
     setLoading(true);
     console.log(formData);
-    
 
     try {
       // API ga yuborish
@@ -61,25 +56,29 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
         // Ro'yxatdan o'tgach, to'g'ridan-to'g'ri biznes sozlamalariga (Onboarding) o'tamiz
-        
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Ro'yxatdan o'tishda xatolik:", error);
-      alert("Xatolik yuz berdi. Ma'lumotlarni tekshiring.");
+      alert(
+        "Xatolik yuz berdi. Ma'lumotlarni tekshiring." +
+          " " +
+          error.response?.data?.error
+      );
     } finally {
       setLoading(false);
     }
   };
 
   if (step === "request") {
-    return <RequestCode
-  onSuccess={(phone) => {
-    setFormData(prev => ({ ...prev, phone }));
-    setStep("verify");
-  }}
-/>
+    return (
+      <RequestCode
+        onSuccess={(phone) => {
+          setFormData((prev) => ({ ...prev, phone }));
+          setStep("verify");
+        }}
+      />
+    );
   }
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
@@ -142,18 +141,17 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
               onChange={handleChange}
             />
             <span className="absolute right-3 top-2/4 -translate-y-2/4 text-gray-400">
-            <button type="button" onClick={() => setEye(!eye)}>
-              <AppIcon
-                name={eye ? "lucide:eye-off" : "lucide:eye"}
-                className="w-6 h-6 inline-block ml-2"
-              />
-                </button>
+              <button type="button" onClick={() => setEye(!eye)}>
+                <AppIcon
+                  name={eye ? "lucide:eye-off" : "lucide:eye"}
+                  className="w-6 h-6 inline-block ml-2"
+                />
+              </button>
             </span>
           </div>
 
           <div>
             <VerifyCode onChange={handleCodeChange} />
-
           </div>
 
           <div>
@@ -182,7 +180,10 @@ export const DefaultRegister: React.FC<RegisterProps> = () => {
         <hr className="my-6 border-t" />
 
         <div className="">
-          <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600" onClick={handleTelegramButtonClick}>
+          <button
+            className="w-full px-4 py-2 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600"
+            onClick={handleTelegramButtonClick}
+          >
             <AppIcon
               name="file-icons:telegram"
               className="w-6 h-6 inline-block mr-2"
