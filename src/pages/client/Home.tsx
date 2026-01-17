@@ -18,6 +18,8 @@ const handleJoinQueue = async () => {
     });
 
     setQueues(res.queues);
+    console.log(queues);
+    
   } catch (error) {
     console.error("Navbatga qo‘shishda xato:", error);
   }
