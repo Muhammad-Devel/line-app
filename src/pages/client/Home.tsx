@@ -1,8 +1,37 @@
 // src/pages/customer/Home.tsx
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { clientQueueService } from "../../services/clientQueue.service";
+import { useEffect, useState } from 'react';
+import { connectSocket, socket } from '../../services/socket';
+
 
 export const CustomerHome = () => {
+  const [queues, setQueues] = useState<any[]>([]);
+
+  const businessId = "123"; // route params yoki state’dan olasiz
+
+const handleJoinQueue = async () => {
+  try {
+    const res = await clientQueueService.addClientToQueue(businessId, {
+      name: "John Doe",
+    });
+
+    setQueues(res.queues);
+  } catch (error) {
+    console.error("Navbatga qo‘shishda xato:", error);
+  }
+};
+
+useEffect(() => {
+  connectSocket();
+  // Boshlang‘ich ma’lumotlarni yuklash mumkin
+  socket.on("client:queue", (data) => {
+  setQueues(data.queues);
+});
+
+}, []);
+
   return (
     <div className="space-y-6">
       {/* Biznes haqida ma'lumot */}
@@ -18,7 +47,7 @@ export const CustomerHome = () => {
       <Card className="p-6 bg-gradient-to-br from-blue-600 to-blue-700 text-white border-none">
         <h3 className="text-lg font-semibold mb-2">Navbatga yozilish</h3>
         <p className="text-blue-100 text-sm mb-6">Navbatga turish uchun tugmani bosing va o'z vaqtingizni tejang.</p>
-        <Button variant="secondary" className="w-full py-6 font-bold text-blue-700">
+        <Button variant="secondary" className="w-full py-6 font-bold text-blue-700" onClick={handleJoinQueue}>
           Navbat olish
         </Button>
       </Card>

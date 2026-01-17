@@ -15,8 +15,10 @@ import { AdminProducts } from "../pages/admin/dashboard/Products";
 import { RetailPOS } from "../pages/admin/retail/RetailPOS"; // Yangi: Sotuv oynasi
 import { TelegramLogin } from "../pages/auth/TelegramLogin";
 import { DefaultRegister } from "../pages/auth/DefaultRegister";
+import { ProtectedRoute } from "../components/layout/ProtectedRoute";
+import { ClientProfile } from "../pages/client/ClientProfile";
 
-const isAuthenticated = true;
+// const isAuthenticated = true;
 
 export const router = createBrowserRouter([
   // --- AUTH YO'NALISHLARI ---
@@ -29,7 +31,11 @@ export const router = createBrowserRouter([
   // --- ADMIN YO'NALISHI (Desktop/Boshqaruv) ---
   {
     path: "/",
-    element: isAuthenticated ? <AdminLayout /> : <Navigate to="/login" />,
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <Navigate to="/dashboard" /> },
       { path: "dashboard", element: <Dashboard /> },
@@ -49,11 +55,16 @@ export const router = createBrowserRouter([
   // --- CUSTOMER YO'NALISHI (Mobil/Mijoz) ---
   {
     path: "/c",
-    element: <CustomerLayout />,
+    element: (
+      <ProtectedRoute roles={["client"]}>
+        <CustomerLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <Navigate to="home" /> },
       { path: ":businessId", element: <CustomerHome /> }, // Menyu/Xizmatlar tanlash
       { path: "my-queue", element: <CustomerStatus /> }, // Mijoz navbat statusi
+      { path: "profile", element: <ClientProfile /> }, // Mijoz profili
       { path: "cart", element: <div>Mijozning savati</div> }, // Yangi: Retail mijoz uchun
     ],
   },

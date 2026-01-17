@@ -1,11 +1,11 @@
 // 1. Enum o'rniga string literal turlarini e'lon qilamiz
-export type BusinessType = 'SERVICE' | 'RETAIL' | 'HYBRID';
+export type BusinessType = 'queue' | 'retail' | 'hybrid';
 
 // 2. O'zgarmas qiymatlarni ob'ekt sifatida saqlaymiz (Enum o'rnini bosadi)
 export const BUSINESS_TYPES = {
-  SERVICE: 'SERVICE' as const,
-  RETAIL: 'RETAIL' as const,
-  HYBRID: 'HYBRID' as const,
+  queue: 'queue' as const,
+  retail: 'retail' as const,
+  hybrid: 'hybrid' as const,
 };
 
 // 3. Biznes funksiyalari interfeysi
@@ -20,7 +20,7 @@ export interface BusinessFeatures {
 
 // 4. Konfiguratsiya (Record yordamida)
 export const BUSINESS_CONFIG: Record<BusinessType, BusinessFeatures> = {
-  SERVICE: {
+  queue: {
     hasQueue: true,
     hasProducts: false,
     hasBooking: true,
@@ -28,7 +28,7 @@ export const BUSINESS_CONFIG: Record<BusinessType, BusinessFeatures> = {
     requiresStaff: true,
     isMadeToOrder: false, // 👈 O'chirilgan
   },
-  RETAIL: {
+  retail: {
     hasQueue: false,
     hasProducts: true,
     hasBooking: false,
@@ -36,7 +36,7 @@ export const BUSINESS_CONFIG: Record<BusinessType, BusinessFeatures> = {
     requiresStaff: false,
     isMadeToOrder: false, // 👈 Qo'shildi
   },
-  HYBRID: { // Masalan, shirinlik tayyorlovchilar uchun
+  hybrid: { // Masalan, shirinlik tayyorlovchilar uchun
     hasQueue: true,
     hasProducts: true,
     hasBooking: true,

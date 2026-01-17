@@ -10,7 +10,7 @@ export default function Sidebar() {
 
   // Foydalanuvchi biznes turiga qarab menyuni filtrlash
   // Agar user.businessType bo'lmasa, default SERVICE deb olamiz
-  const businessType = user?.businessType || "RETAIL";
+  const businessType = user?.businessType || "queue";
 
   const filteredNavItems = ADMIN_NAV_ITEMS.filter(
     (item) => !item.roles || item.roles.includes(businessType)

@@ -2,11 +2,11 @@
 export const roleRedirect = (role: string) => {
   switch (role) {
     case "admin":
-      return "/dashboard";
+      return "/";
     case "business":
       return "/onboarding";
     case "client":
-      return "/home";
+      return "/c";
     default:
       return "/login";
   }

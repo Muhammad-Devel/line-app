@@ -13,13 +13,13 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     title: "Jonli Navbat",
     path: "/queue",
     icon: "lucide:users",
-    roles: ["SERVICE", "HYBRID"],
+    roles: ["queue", "hybrid"],
   },
   {
     title: "Sotuv (POS)",
     path: "/pos",
     icon: "lucide:shopping-cart",
-    roles: ["RETAIL", "HYBRID"],
+    roles: ["retail", "hybrid"],
   },
   { title: "Buyurtmalar", path: "/orders", icon: "lucide:clipboard-list" }, // Hamma uchun
   { title: "Mahsulotlar", path: "/products", icon: "lucide:package" }, // Hamma uchun

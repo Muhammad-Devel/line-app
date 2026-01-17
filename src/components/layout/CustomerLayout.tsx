@@ -1,9 +1,21 @@
 import { Outlet } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import AppIcon from "../ui/AppIcon";
+import { useState } from "react";
+import { useAuthStore } from "../../store/auth.store";
 
 export const CustomerLayout = () => {
   const location = useLocation();
+
+  const [profile, setProfile] = useState({
+    name: "Foydalanuvchi",
+    phone: "Noma'lum",
+  });
+
+  const { name, phone } = useAuthStore.getState().user || {};
+  if (name && phone && profile.name === "Foydalanuvchi") {
+    setProfile({ name, phone });
+  }
 
   const navItems = [
     { icon: <AppIcon name="lucide:home" />, label: "Asosiy", path: "/c/home" },
@@ -30,7 +42,9 @@ export const CustomerLayout = () => {
       <header className="bg-white p-4 sticky top-0 z-10 border-b flex justify-between items-center">
         <h1 className="font-bold text-lg text-blue-600">Line App</h1>
         <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">
-          JD
+          {/* Avatar */}
+
+          {profile?.name.charAt(0).toUpperCase()}
         </div>
       </header>
 
