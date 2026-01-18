@@ -64,33 +64,33 @@ export const Onboarding = () => {
              <StatCard
           title="Xizmat ko'rsatish"
           value="barber, avtousta, klinika, ..."
-          className={`w-64 bg-white shadow-lg p-4 hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${config.type === "SERVICE" ? "border-4 border-green-500" : ""}`}
+          className={`w-64 bg-white shadow-lg p-4 hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${config.type === "queue" ? "border-4 border-green-500" : ""}`}
           titleClassName="text-2xl text-center"
           valueClassName="text-sm text-gray-400 text-center"
           icon="medical-icon:i-interpreter-services"
           iconClassName="grid place-items-center text-blue-500 mb-4"
-          onClick={() => setBusinessConfig({ type: "SERVICE" })}
+          onClick={() => setBusinessConfig({ type: "queue" })}
         />
 
         <StatCard
           title="Savdo"
           value="Do'kon, kafe, butik, ..."
-          className={`w-64 bg-white shadow-lg p-4  hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${config.type === "RETAIL" ? "border-4 border-green-500" : ""}`}
+          className={`w-64 bg-white shadow-lg p-4  hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${config.type === "retail" ? "border-4 border-green-500" : ""}`}
           titleClassName="text-2xl text-center"
           valueClassName="text-sm text-gray-400 text-center"
           icon="healthicons:market-stall"
           iconClassName="grid place-items-center text-blue-500 mb-4"
-            onClick={() => setBusinessConfig({ type: "RETAIL" })}   
+            onClick={() => setBusinessConfig({ type: "retail" })}   
         />
         <StatCard
           title="Ikkalasi bittada"
           value="Xizmat va savdo"
-          className={`w-64 col-span-2 justify-self-center bg-white shadow-lg p-4 hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${config.type === "HYBRID" ? "border-4 border-green-500" : ""}`}
+          className={`w-64 col-span-2 justify-self-center bg-white shadow-lg p-4 hover:scale-105 hover:bg-gray-100 transition-transform duration-300 ${config.type === "hybrid" ? "border-4 border-green-500" : ""}`}
           titleClassName="text-2xl text-center"
           valueClassName="text-sm text-gray-400 text-center"
           icon="mdi:store-cog"
           iconClassName="grid place-items-center text-blue-500 mb-4"
-            onClick={() => setBusinessConfig({ type: "HYBRID" })}
+            onClick={() => setBusinessConfig({ type: "hybrid" })}
         />
           </div>
           <div className="flex justify-center pt-6">
