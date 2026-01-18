@@ -4,7 +4,7 @@ export interface NavItem {
   title: string;
   path: string;
   icon: string;
-  roles?: BusinessType[]; // Qaysi biznes turlarida ko'rinishi
+  businessType?: BusinessType[]; // Qaysi biznes turlarida ko'rinishi
 }
 
 export const ADMIN_NAV_ITEMS: NavItem[] = [
@@ -13,13 +13,13 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     title: "Jonli Navbat",
     path: "/queue",
     icon: "lucide:users",
-    roles: ["queue", "hybrid"],
+    businessType: ["queue", "hybrid"],
   },
   {
     title: "Sotuv (POS)",
     path: "/pos",
     icon: "lucide:shopping-cart",
-    roles: ["retail", "hybrid"],
+    businessType: ["retail", "hybrid"],
   },
   { title: "Buyurtmalar", path: "/orders", icon: "lucide:clipboard-list" }, // Hamma uchun
   { title: "Mahsulotlar", path: "/products", icon: "lucide:package" }, // Hamma uchun

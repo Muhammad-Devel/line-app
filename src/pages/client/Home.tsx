@@ -1,7 +1,7 @@
 // src/pages/customer/Home.tsx
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { clientQueueService } from "../../services/clientQueue.service";
+import { queueService } from "../../services/queue.service";
 import { useEffect, useState } from 'react';
 import { connectSocket, socket } from '../../services/socket';
 
@@ -9,19 +9,16 @@ import { connectSocket, socket } from '../../services/socket';
 export const CustomerHome = () => {
   const [queues, setQueues] = useState<any[]>([]);
 
-  const businessId = "123"; // route params yoki state’dan olasiz
+  const serviceId = "123"; // route params yoki state’dan olasiz
 
 const handleJoinQueue = async () => {
   try {
-    const res = await clientQueueService.addClientToQueue(businessId, {
-      name: "John Doe",
-    });
-
-    setQueues(res.queues);
+    const res = await queueService.joinQueue(serviceId);
+    alert(`Sizning navbat raqamingiz: ${res.data.queueNumber}`);
     console.log(queues);
     
-  } catch (error) {
-    console.error("Navbatga qo‘shishda xato:", error);
+  } catch (e) {
+    alert("Navbatga yozilishda xatolik");
   }
 };
 

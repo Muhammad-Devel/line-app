@@ -9,7 +9,7 @@ function Header({}: Props) {
   const location = useLocation();
   const businessType = user?.businessType || "SERVICE";
   const filteredNavItems = ADMIN_NAV_ITEMS.filter(
-    (item) => !item.roles || item.roles.includes(businessType)
+    (item) => !item.businessType || item.businessType.includes(businessType)
   );
 
   return (

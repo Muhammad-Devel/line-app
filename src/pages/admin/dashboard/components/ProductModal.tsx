@@ -3,29 +3,40 @@ import { useForm } from "react-hook-form";
 import api from "../../../../services/api";
 import AppIcon from "../../../../components/ui/AppIcon";
 import { Button } from "../../../../components/ui/Button";
+import { useAuthStore } from "../../../../store/auth.store";
 
 export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
-  const { register, handleSubmit, reset } = useForm({
-    values: product || {
+  const { user } = useAuthStore();
+
+  const { register, handleSubmit, reset, watch } = useForm({
+    defaultValues: product || {
       name: "",
       price: 0,
       stock: 0,
+      duration: 0,
       category: "",
+      type: user.businessType === "retail" ? "product" : "service",
       isActive: true,
     },
   });
+
+  const type = watch("type");
+  console.log(type, "type");
 
   if (!isOpen) return null;
 
   const onSubmit = async (data: any) => {
     try {
+      // keraksiz fieldlarni olib tashlash
+      if (data.type === "product") delete data.duration;
+      if (data.type === "service") delete data.stock;
+
       if (product) {
-        // Endpoint 14: Update
         await api.put(`/admin/products/${product._id}`, data);
       } else {
-        // Endpoint 13: Create
         await api.post("/admin/products", data);
       }
+
       onRefresh();
       onClose();
       reset();
@@ -71,8 +82,46 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
                 className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
               />
             </div>
+            {/* <div className="space-y-1">
+              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                Turi
+              </label>
+              <select
+                {...register("type")}
+                className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold appearance-none"
+              >
+                <option value="product">Mahsulot</option>
+                <option value="service">Xizmat</option>
+              </select>
+            </div> */}
 
-            <div className="space-y-1">
+            {watch("type") === "product" && (
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                  Ombor qoldig'i
+                </label>
+                <input
+                  type="number"
+                  {...register("stock")}
+                  className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
+                />
+              </div>
+            )}
+
+            {watch("type") === "service" && (
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                  Muddati (min)
+                </label>
+                <input
+                  type="number"
+                  {...register("duration")}
+                  className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
+                />
+              </div>
+            )}
+
+            {/* <div className="space-y-1">
               <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
                 Ombor qoldig'i
               </label>
@@ -81,22 +130,24 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
                 {...register("stock")}
                 className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
               />
-            </div>
+            </div> */}
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
-              Kategoriya
-            </label>
-            <select
-              {...register("category")}
-              className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold appearance-none"
-            >
-              <option value="ichimliklar">Ichimliklar</option>
-              <option value="ovqatlar">Ovqatlar</option>
-              <option value="shirinliklar">Shirinliklar</option>
-            </select>
-          </div>
+          {watch("type") === "product" && (
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                Kategoriya
+              </label>
+              <select
+                {...register("category")}
+                className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold appearance-none"
+              >
+                <option value="ichimliklar">Ichimliklar</option>
+                <option value="ovqatlar">Ovqatlar</option>
+                <option value="shirinliklar">Shirinliklar</option>
+              </select>
+            </div>
+          )}
 
           <Button className="w-full h-16 bg-slate-900 text-white rounded-2xl font-black text-lg mt-4 shadow-xl">
             SAQLASH

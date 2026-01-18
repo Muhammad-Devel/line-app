@@ -6,14 +6,16 @@ import { Button } from "../../components/ui/Button";
 
 export default function Sidebar() {
   const { user } = useAuthStore();
- 
 
   // Foydalanuvchi biznes turiga qarab menyuni filtrlash
   // Agar user.businessType bo'lmasa, default SERVICE deb olamiz
   const businessType = user?.businessType || "queue";
 
+  console.log(user.businessType);
+  
+
   const filteredNavItems = ADMIN_NAV_ITEMS.filter(
-    (item) => !item.roles || item.roles.includes(businessType)
+    (item) => !item.businessType || item.businessType.includes(businessType)
   );
   return (
     <aside className="w-72 bg-white border-r border-slate-100 flex flex-col">
