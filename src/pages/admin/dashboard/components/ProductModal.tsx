@@ -1,22 +1,25 @@
 // src/pages/admin/dashboard/components/ProductModal.tsx
 import { useForm } from "react-hook-form";
-import api from "../../../../services/api";
 import AppIcon from "../../../../components/ui/AppIcon";
 import { Button } from "../../../../components/ui/Button";
 import { useAuthStore } from "../../../../store/auth.store";
+import { useProductStore } from "../../../../store/product.store";
 
 export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
   const { user } = useAuthStore();
+  const {updateProduct, addProduct} = useProductStore();
 
   const { register, handleSubmit, reset, watch } = useForm({
     defaultValues: product || {
       name: "",
+      ownerId: user.id,
       price: 0,
       stock: 0,
       duration: 0,
       category: "",
-      type: user.businessType === "retail" ? "product" : "service",
+      type: user.businessType,
       isActive: true,
+      image: null,
     },
   });
 
@@ -26,22 +29,25 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
   if (!isOpen) return null;
 
   const onSubmit = async (data: any) => {
+    console.log(data);
+
     try {
       // keraksiz fieldlarni olib tashlash
-      if (data.type === "product") delete data.duration;
-      if (data.type === "service") delete data.stock;
+      if (data.type === "retail") delete data.duration;
+      if (data.type === "queue") delete data.stock;
 
       if (product) {
-        await api.put(`/admin/products/${product._id}`, data);
+        await updateProduct(product._id, data);
       } else {
-        await api.post("/admin/products", data);
+        await addProduct(data);
       }
 
       onRefresh();
       onClose();
       reset();
-    } catch (err) {
-      alert("Xatolik yuz berdi");
+    } catch (err: any) {
+      alert("Xatolik yuz berdi" + " " + err.response?.data?.errors[0].msg);
+      console.log(err);
     }
   };
 
@@ -95,7 +101,7 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
               </select>
             </div> */}
 
-            {watch("type") === "product" && (
+            {watch("type") === "retail" && (
               <div className="space-y-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
                   Ombor qoldig'i
@@ -108,7 +114,7 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
               </div>
             )}
 
-            {watch("type") === "service" && (
+            {watch("type") === "queue" && (
               <div className="space-y-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
                   Muddati (min)
@@ -120,20 +126,9 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
                 />
               </div>
             )}
-
-            {/* <div className="space-y-1">
-              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
-                Ombor qoldig'i
-              </label>
-              <input
-                type="number"
-                {...register("stock")}
-                className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
-              />
-            </div> */}
           </div>
 
-          {watch("type") === "product" && (
+          {watch("type") === "retail" && (
             <div className="space-y-1">
               <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
                 Kategoriya
@@ -148,6 +143,17 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
               </select>
             </div>
           )}
+
+          {/* <div className="space-y-1">
+              <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
+                Maxsulot/Xizmat rasmi
+              </label>
+              <input
+                type="file"
+                {...register("image")}
+                className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
+              />
+            </div> */}
 
           <Button className="w-full h-16 bg-slate-900 text-white rounded-2xl font-black text-lg mt-4 shadow-xl">
             SAQLASH

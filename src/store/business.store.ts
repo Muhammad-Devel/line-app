@@ -4,7 +4,7 @@ interface BusinessState {
   step: number;
   config: {
     name: string;
-    type: 'SERVICE' | 'RETAIL' | 'HYBRID' | null;
+    type: 'queue' | 'retail' | 'hybrid' | null;
     category: string;
     features: string[];
   };

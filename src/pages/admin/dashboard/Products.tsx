@@ -1,20 +1,20 @@
 // src/pages/admin/dashboard/Products.tsx
 import { useState, useEffect } from "react";
-import api from "../../../services/api";
 import { Card } from "../../../components/ui/Card";
 import { Button } from "../../../components/ui/Button";
 import AppIcon from "../../../components/ui/AppIcon";
 import { ProductModal } from "./components/ProductModal"; // Modal komponenti
+// import { productService } from "../../../services/product.service";
+import { useProductStore } from "../../../store/product.store";
 
 export const AdminProducts = () => {
-  const [products, setProducts] = useState([]);
+  // const [productsAll, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const fetchProducts = async () => {
-    const res = await api.get("/admin/products");
-    setProducts(res.data.products);
-  };
+  const { fetchProducts, products, loading } = useProductStore();
+
+  const productsAll = products || [];
 
   useEffect(() => {
     fetchProducts();
@@ -59,7 +59,15 @@ export const AdminProducts = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
-            {products.map((p: any) => (
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="px-6 py-4 text-center">
+                  Yuklanmoqda...
+                </td>
+              </tr>
+            ) : null}
+
+            {productsAll.map((p: any) => (
               <tr
                 key={p._id}
                 className="hover:bg-slate-50 transition-colors group"
