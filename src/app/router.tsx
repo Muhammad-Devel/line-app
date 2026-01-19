@@ -17,6 +17,7 @@ import { TelegramLogin } from "../pages/auth/TelegramLogin";
 import { DefaultRegister } from "../pages/auth/DefaultRegister";
 import { ProtectedRoute } from "../components/layout/ProtectedRoute";
 import { ClientProfile } from "../pages/client/ClientProfile";
+import { Banner } from "../pages/admin/modules/Banner";
 
 // const isAuthenticated = true;
 
@@ -49,6 +50,8 @@ export const router = createBrowserRouter([
 
       // 👥 SERVICE (Navbatlar)
       { path: "queue", element: <QueuePage /> },
+      // Banner(QR code)
+      { path: "banner", element: <Banner /> },
     ],
   },
 

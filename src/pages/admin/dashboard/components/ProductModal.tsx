@@ -7,7 +7,7 @@ import { useProductStore } from "../../../../store/product.store";
 
 export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
   const { user } = useAuthStore();
-  const {updateProduct, addProduct} = useProductStore();
+  const { updateProduct, addProduct } = useProductStore();
 
   const { register, handleSubmit, reset, watch } = useForm({
     defaultValues: product || {
@@ -15,16 +15,16 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
       ownerId: user.id,
       price: 0,
       stock: 0,
-      duration: 0,
+      duration: 1,
       category: "",
-      type: user.businessType,
+      types: user.businessType,
       isActive: true,
       image: null,
     },
   });
 
-  const type = watch("type");
-  console.log(type, "type");
+  const types = watch("types");
+  console.log(types, "types");
 
   if (!isOpen) return null;
 
@@ -32,10 +32,17 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
     console.log(data);
 
     try {
-      // keraksiz fieldlarni olib tashlash
-      if (data.type === "retail") delete data.duration;
-      if (data.type === "queue") delete data.stock;
+      if (data.types === "retail") {
+        delete data.duration;
+      }
 
+      if (data.types === "queue") {
+        delete data.stock;
+        if (!data.duration || data.duration < 1) {
+          alert("Xizmat davomiyligi kamida 1 daqiqa bo‘lishi kerak");
+          return;
+        }
+      }
       if (product) {
         await updateProduct(product._id, data);
       } else {
@@ -101,7 +108,7 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
               </select>
             </div> */}
 
-            {watch("type") === "retail" && (
+            {watch("types") === "retail" && (
               <div className="space-y-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
                   Ombor qoldig'i
@@ -114,21 +121,22 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
               </div>
             )}
 
-            {watch("type") === "queue" && (
+            {watch("types") === "queue" && (
               <div className="space-y-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
                   Muddati (min)
                 </label>
                 <input
                   type="number"
-                  {...register("duration")}
+                  min={1}
+                  {...register("duration", { valueAsNumber: true })}
                   className="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold"
                 />
               </div>
             )}
           </div>
 
-          {watch("type") === "retail" && (
+          {watch("types") === "retail" && (
             <div className="space-y-1">
               <label className="text-[10px] font-black text-slate-400 uppercase ml-2">
                 Kategoriya

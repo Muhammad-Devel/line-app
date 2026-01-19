@@ -3,8 +3,10 @@ import { Link, useLocation } from "react-router-dom";
 import AppIcon from "../ui/AppIcon";
 import { useState } from "react";
 import { useAuthStore } from "../../store/auth.store";
+import { CLIENT_NAV_ITEMS} from "../../constants/navigation";
 
 export const CustomerLayout = () => {
+
   const location = useLocation();
 
   const [profile, setProfile] = useState({
@@ -12,29 +14,14 @@ export const CustomerLayout = () => {
     phone: "Noma'lum",
   });
 
-  const { name, phone } = useAuthStore.getState().user || {};
+  const { name, phone, businessType } = useAuthStore.getState().user || {};
   if (name && phone && profile.name === "Foydalanuvchi") {
     setProfile({ name, phone });
   }
 
-  const navItems = [
-    { icon: <AppIcon name="lucide:home" />, label: "Asosiy", path: "/c/home" },
-    {
-      icon: <AppIcon name="lucide:clock" />,
-      label: "Navbatim",
-      path: "/c/my-queue",
-    },
-    {
-      icon: <AppIcon name="lucide:shopping-bag" />,
-      label: "Katalog",
-      path: "/c/catalog",
-    },
-    {
-      icon: <AppIcon name="lucide:user" />,
-      label: "Profil",
-      path: "/c/profile",
-    },
-  ];
+  const filteredNavItems = CLIENT_NAV_ITEMS.filter(
+      (item) => !item.businessType || item.businessType.includes(businessType)
+    );
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto shadow-2xl">
@@ -55,7 +42,7 @@ export const CustomerLayout = () => {
 
       {/* 🔘 BOTTOM NAVIGATION (Mobile Style) */}
       <nav className="fixed bottom-0 w-full max-w-md bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-20 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        {navItems.map((item) => {
+        {filteredNavItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <Link
@@ -65,8 +52,8 @@ export const CustomerLayout = () => {
                 isActive ? "text-blue-600 scale-110" : "text-slate-400"
               }`}
             >
-              {item.icon}
-              <span className="text-[10px] font-medium">{item.label}</span>
+              <AppIcon name={item.icon} />
+              <span className="text-[10px] font-medium">{item.title}</span>
             </Link>
           );
         })}
