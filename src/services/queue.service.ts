@@ -1,16 +1,10 @@
-// src/services/queue.service.ts
-import api from "./api";
+﻿import api from "./api";
 
 export const queueService = {
-  // ➕ Navbatga yozilish
-  joinQueue: (serviceId: string) =>
-    api.post("/client/queue", { serviceId }),
+  joinQueue: (serviceId: string, orderId?: string) =>
+    api.post("/client/queue", { serviceId, orderId }),
 
-  // 📄 Mijozning hozirgi navbati
-  myQueue: () =>
-    api.get("/client/queue/my"),
+  myQueue: () => api.get("/client/queue/my"),
 
-  // 📊 Xizmat bo‘yicha navbat
-  getServiceQueue: (serviceId: string) =>
-    api.get(`/queue/service/${serviceId}`),
+  getServiceQueue: (serviceId: string) => api.get(`/queue/service/${serviceId}`),
 };

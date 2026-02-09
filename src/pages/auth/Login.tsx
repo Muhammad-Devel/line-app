@@ -1,157 +1,176 @@
-import AppIcon from "../../components/ui/AppIcon";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../../services/auth.service";
-import { useAuthStore } from "../../store/auth.store";
-import { roleRedirect } from "../../utils/roleRedirect";
-// import { TelegramAuth } from "./TelegramLogin"; // Bu brauzer uchun widget
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
-function Login() {
-  const [loading, setLoading] = useState(false);
-  const [eye, setEye] = useState(false);
-  const [formData, setFormData] = useState({
-    phone: "",
-    password: "",
-  });
-  
-  
-  const navigate = useNavigate();
-  const authStore = useAuthStore((state) => state);
+const Login: React.FC = () => {
+  const [phone, setPhone] = useState<string>('');
+  const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
+  const [code, setCode] = useState<string[]>(new Array(6).fill(''));
+  const [timer, setTimer] = useState<number>(0); // 0 dan boshlaymiz
+  const inputRefs = useRef<HTMLInputElement[]>([]);
 
-  // Muvaffaqiyatli logindan so'ng
-  const handleLoginSuccess = (res:any) => {
-    authStore.setAuth(res.data.token, res.data.user);
-    navigate(roleRedirect(res.data.user.role), { replace: true });
-  }
+  const PROJECT_CODE = "f585b98b";
+  const PROJECT_KEY = "b16a82e01675b89e4e254dcdb1d83f3a94d399cd3cfb880b";
+  // Botga o'tish URL (telefon raqamini parametr sifatida yuborish tavsiya etiladi)
+  const TG_BOT_URL = `https://t.me/auth_tg_robot?start=${PROJECT_CODE}`;
 
-  // Oddiy forma orqali kirish
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await login(formData);
-      handleLoginSuccess(res);
-    } catch (err:any) {
-      alert(
-        "Telefon yoki parol noto'g'ri" + " " + err.response?.data?.error || ""
-      );
-      console.log("Login xatosi:", err.response || err);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => setTimer(prev => prev - 1), 1000);
+      return () => clearInterval(interval);
+    }
+  }, [timer]);
+
+  const handleCodeChange = (element: HTMLInputElement, index: number) => {
+    const value = element.value.replace(/[^0-9]/g, ''); // Faqat raqam
+    if (!value && element.value !== '') return;
+
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    if (value !== '' && index < 5) {
+      inputRefs.current[index + 1].focus();
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleSendCode = async () => {
+    if (phone.length < 9) {
+      alert("Iltimos, telefon raqamingizni to'liq kiriting");
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://46.173.28.159:3000/auth/request', {
+        phone: `+998${phone}`
+      }, {
+        headers: { 'x-project-key': PROJECT_KEY }
+      });
+
+      console.log('Javob:', response.data);
+
+      // Agar API foydalanuvchi botdan ro'yxatdan o'tishi kerakligini aytsa
+      // Masalan: response.data.status === "need_telegram_auth"
+      if (response.data.error || response.data.error === "phone not linked to telegram") {
+        const confirmBot = window.confirm("Tizimdan foydalanish uchun Telegram botimizdan ro'yxatdan o'tishingiz kerak. Botga o'tasizmi?");
+        if (confirmBot) {
+          window.open(TG_BOT_URL, '_blank');
+          return; // Kod yuborish qismini to'xtatib turamiz
+        }
+      }
+
+      setIsCodeSent(true);
+      setTimer(59);
+    } catch (error: any) {
+      if (error.response?.data?.error === "phone not linked to telegram") {
+        const confirmBot = window.confirm("Tizimdan foydalanish uchun Telegram botimizdan ro'yxatdan o'tishingiz kerak. Botga o'tasizmi?");
+        if (confirmBot) {
+          window.open(TG_BOT_URL, '_blank');
+          return; // Kod yuborish qismini to'xtatib turamiz
+        }
+      }
+      console.error('Xatolik:', error);
+      alert(error.response?.data?.error || 'Kod yuborishda xatolik yuz berdi!');
+    }
   };
 
-  // Telegram tugmasi bosilganda (Brauzerda bo'lsa botga, Mini Appda bo'lsa tg ichiga)
-  const handleTelegramButtonClick = () => {
-    const tg = (window as any).Telegram?.WebApp;
-    if (tg && tg.initData && tg.initData !== "") {
-      // Allaqachon Mini App ichida, useEffect buni hal qiladi yoki qayta so'rov yuborish mumkin
-      alert("Siz allaqachon Telegram Mini App ichidasiz");
-    } else {
-      // Oddiy brauzerda bo'lsa botga yuboramiz
-      window.location.href = "https://t.me/line_app_bot?start=start";
+  const handleSubmit = async () => {
+    const fullCode = code.join('');
+    if (fullCode.length < 6) return;
+
+    try {
+      const response = await axios.post('http://46.173.28.159:3000/auth/verify', {
+        phone: `+998${phone}`,
+        code: fullCode
+      }, {
+        headers: { 'x-project-key': PROJECT_KEY }
+      });
+      
+      localStorage.setItem('token', response.data.token);
+      alert('Muvaffaqiyatli kirdingiz!');
+      // roleRedirect(response.data.user.role); // Yo'naltirish
+    } catch (error) {
+      alert('Kod noto\'g\'ri yoki muddati o\'tgan!');
+      console.log(error);
+      
     }
   };
 
   return (
-    <div className="flex items-center flex-col justify-center h-screen bg-white">
-      <div className="bg-zinc-50 p-8 rounded-3xl shadow-sm w-96 text-center border border-zinc-100">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-blue-600">Line App</h2>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-sans text-[#333]">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 space-y-8 border border-gray-50">
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl font-extrabold text-[#1a4f95]">Tizimga Kirish</h1>
+          <p className="text-gray-400 text-sm">Tasdiqlash kodi Telegram bot orqali yuboriladi</p>
         </div>
 
-        <h1 className="text-3xl font-bold mt-4">Xush kelibsiz!</h1>
-        <p className="text-sm text-gray-400 mt-2">
-          Tizimga kirish usulini tanlang
-        </p>
-
-        <div className="mt-10 space-y-4">
-          {/* 3-USUL: ODDIY LOGIN FORMA */}
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div className="relative">
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                placeholder="+998 __ ___ __ __"
-                className="w-full bg-white px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
-                onChange={handleChange}
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                <AppIcon name="lucide:phone" className="w-5 h-5" />
-              </span>
-            </div>
-
-            <div className="relative">
-              <input
-                type={eye ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                placeholder="Parolingiz"
-                className="w-full bg-white px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
-                onChange={handleChange}
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                <button type="button" onClick={() => setEye(!eye)}>
-                  <AppIcon
-                    name={eye ? "lucide:eye" : "lucide:lock"}
-                    className="w-5 h-5"
-                  />
-                </button>
-              </span>
-            </div>
-
-            <button
-              disabled={loading}
-              className="w-full py-3 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-all active:scale-95"
-            >
-              {loading ? "Kutilmoqda..." : "Davom etish"}
-            </button>
-          </form>
-
-          <div className="relative py-2">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-200"></span>
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-zinc-50 px-2 text-gray-400">Yoki</span>
-            </div>
+        {/* Telefon raqam */}
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Telefon Raqami</label>
+          <div className="flex items-center border-2 border-gray-100 rounded-2xl overflow-hidden focus-within:border-[#1a4f95] transition-all bg-gray-50">
+            <span className="pl-4 pr-2 py-4 text-gray-500 font-medium border-r border-gray-200">+998</span>
+            <input 
+              type="tel"
+              placeholder="90 123 45 67"
+              className="w-full px-4 py-4 outline-none bg-transparent font-semibold text-lg"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              disabled={isCodeSent}
+            />
           </div>
-
-          {/* 1-USUL: TELEGRAM MINI APP TUGMASI (Yoki Botga yo'naltirish) */}
-          <button
-            onClick={handleTelegramButtonClick}
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#0088cc] text-white rounded-xl shadow-md hover:bg-[#0077b5] transition-all active:scale-95"
-          >
-            <AppIcon name="file-icons:telegram" className="w-6 h-6" />
-            <span className="font-semibold text-sm">
-              {loading ? "Yuklanmoqda..." : "Telegram App orqali"}
-            </span>
-          </button>
-
-          {/* 2-USUL: TELEGRAM WIDGET (Brauzer uchun tugma)
-          <div className="flex justify-center">
-            <TelegramAuth />
-          </div> */}
-
-          <p className="text-[10px] text-gray-400 mt-6 leading-relaxed">
-            Tizimga kirish orqali siz{" "}
-            <a href="#" className="text-blue-500 underline">
-              Foydalanish shartlari
-            </a>
-            ni qabul qilasiz.
-          </p>
         </div>
+
+        {/* Kod kiritish */}
+        {isCodeSent && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="flex justify-between items-center">
+              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Tasdiqlash KODI</label>
+              <button onClick={() => setIsCodeSent(false)} className="text-xs text-blue-500 font-semibold italic">Raqamni o'zgartirish</button>
+            </div>
+            <div className="flex justify-between gap-2">
+              {code.map((data, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength={1}
+                  ref={(el:any) => (inputRefs.current[index] = el!)}
+                  className="w-11 h-14 border-2 border-gray-200 rounded-xl text-center text-2xl font-black text-[#1a4f95] focus:border-[#1a4f95] focus:bg-blue-50 outline-none transition-all"
+                  value={data}
+                  onChange={(e) => handleCodeChange(e.target, index)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Backspace' && !code[index] && index > 0) {
+                      inputRefs.current[index - 1].focus();
+                    }
+                  }}
+                />
+              ))}
+            </div>
+            
+            <button 
+              disabled={timer > 0}
+              onClick={handleSendCode}
+              className="w-full text-center text-sm font-medium text-blue-600 hover:text-blue-800 disabled:text-gray-400"
+            >
+              {timer > 0 ? `Kodni qayta yuborish (${timer}s)` : 'Kodni qayta yuborish'}
+            </button>
+          </div>
+        )}
+
+        {/* Tugma */}
+        <button
+          onClick={isCodeSent ? handleSubmit : handleSendCode}
+          className="w-full bg-[#1a4f95] hover:bg-[#113a70] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all transform active:scale-95 shadow-lg shadow-blue-100"
+        >
+          <span className="tracking-wide">{isCodeSent ? "DAVOM ETISH" : "KOD OLISH"}</span>
+          <div className="bg-white/20 p-1 rounded-full">
+            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </div>
+        </button>
       </div>
     </div>
   );
-}
+};
+
 
 export default Login;

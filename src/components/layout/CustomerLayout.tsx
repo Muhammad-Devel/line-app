@@ -1,46 +1,31 @@
-import { Outlet } from "react-router-dom";
-import { Link, useLocation } from "react-router-dom";
+﻿import { Link, Outlet, useLocation } from "react-router-dom";
 import AppIcon from "../ui/AppIcon";
-import { useState } from "react";
 import { useAuthStore } from "../../store/auth.store";
-import { CLIENT_NAV_ITEMS} from "../../constants/navigation";
+import { CLIENT_NAV_ITEMS } from "../../constants/navigation";
 
 export const CustomerLayout = () => {
-
   const location = useLocation();
-
-  const [profile, setProfile] = useState({
-    name: "Foydalanuvchi",
-    phone: "Noma'lum",
-  });
-
-  const { name, phone, businessType } = useAuthStore.getState().user || {};
-  if (name && phone && profile.name === "Foydalanuvchi") {
-    setProfile({ name, phone });
-  }
+  const user = useAuthStore((s) => s.user);
+  const businessType = user?.businessType;
+  const profileName = user?.name ?? "Foydalanuvchi";
 
   const filteredNavItems = CLIENT_NAV_ITEMS.filter(
-      (item) => !item.businessType || item.businessType.includes(businessType)
-    );
+    (item) => !item.businessType || item.businessType.includes(businessType)
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto shadow-2xl">
-      {/* 📱 TOP HEADER */}
       <header className="bg-white p-4 sticky top-0 z-10 border-b flex justify-between items-center">
         <h1 className="font-bold text-lg text-blue-600">Line App</h1>
         <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">
-          {/* Avatar */}
-
-          {profile?.name.charAt(0).toUpperCase()}
+          {profileName.charAt(0).toUpperCase()}
         </div>
       </header>
 
-      {/* 🎯 MAIN CONTENT AREA */}
       <main className="flex-1 p-4 pb-24">
         <Outlet />
       </main>
 
-      {/* 🔘 BOTTOM NAVIGATION (Mobile Style) */}
       <nav className="fixed bottom-0 w-full max-w-md bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-20 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
         {filteredNavItems.map((item) => {
           const isActive = location.pathname === item.path;

@@ -32,17 +32,17 @@ export const ProductModal = ({ isOpen, onClose, product, onRefresh }: any) => {
     console.log(data);
 
     try {
-      if (data.types === "retail") {
-        delete data.duration;
-      }
+      // if (data.types === "retail") {
+      //   delete data.duration;
+      // }
 
-      if (data.types === "queue") {
-        delete data.stock;
-        if (!data.duration || data.duration < 1) {
-          alert("Xizmat davomiyligi kamida 1 daqiqa bo‘lishi kerak");
-          return;
-        }
-      }
+      // if (data.types === "queue") {
+      //   delete data.stock;
+      //   if (!data.duration || data.duration < 1) {
+      //     alert("Xizmat davomiyligi kamida 1 daqiqa bo‘lishi kerak");
+      //     return;
+      //   }
+      // }
       if (product) {
         await updateProduct(product._id, data);
       } else {
