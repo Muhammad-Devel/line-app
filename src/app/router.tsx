@@ -15,14 +15,14 @@ import { Onboarding } from "../pages/auth/OnBoarding";
 import { AdminProducts } from "../pages/admin/dashboard/Products";
 import { RetailPOS } from "../pages/admin/retail/RetailPOS";
 import { TelegramLogin } from "../pages/auth/TelegramLogin";
-import { DefaultRegister } from "../pages/auth/DefaultRegister";
 import { ProtectedRoute } from "../components/layout/ProtectedRoute";
 import { ClientProfile } from "../pages/client/ClientProfile";
 import { Banner } from "../pages/admin/modules/Banner";
+import {Register}  from "../pages/auth/Register";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
-  { path: "/register", element: <DefaultRegister /> },
+  { path: "/register", element: <Register onSuccess={(step) => console.log("Register step:", step)} /> },
   { path: "/telegram", element: <TelegramLogin /> },
   { path: "/add-business", element: <AddBussiness /> },
   { path: "/onboarding", element: <Onboarding /> },
