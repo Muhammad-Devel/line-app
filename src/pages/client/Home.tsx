@@ -4,21 +4,24 @@ import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { connectSocket, socket } from "../../services/socket";
 import { useQueueStore } from "../../store/queue.store";
+import { useClientStore } from "../../store/client.store";
 import { ClientEntry } from "./ClientEntry";
 
 export const CustomerHome = () => {
   const { businessId } = useParams();
+  const storedBusinessId = useClientStore((s) => s.businessId);
   const [queues, setQueues] = useState<any[]>([]);
   const joinQueue = useQueueStore((s) => s.joinQueue);
 
   const handleJoinQueue = async () => {
-    if (!businessId) {
+    const targetBusinessId = businessId ?? storedBusinessId;
+    if (!targetBusinessId) {
       alert("Biznes topilmadi. Iltimos, qayta urinib ko'ring.");
       return;
     }
 
     try {
-      const queue = await joinQueue(businessId);
+      const queue = await joinQueue(targetBusinessId);
       if (queue?.queueNumber) {
         alert(`Sizning navbat raqamingiz: ${queue.queueNumber}`);
       }

@@ -3,6 +3,7 @@ import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import AppIcon from "../../components/ui/AppIcon";
 import api from "../../services/api";
+import { useBusinessStore } from "../../store/business.store";
 
 interface RegisterProps {
   onSuccess: (step: number) => void;
@@ -12,6 +13,7 @@ type BusinessType = "service" | "product";
 
 export const Register: React.FC<RegisterProps> = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
+  const setBusinessConfig = useBusinessStore((s) => s.setBusinessConfig);
   const [formData, setFormData] = useState({
     companyName: "",
     ownerFirstName: "",
@@ -21,7 +23,11 @@ export const Register: React.FC<RegisterProps> = ({ onSuccess }) => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (name === "companyName") {
+      setBusinessConfig({ name: value });
+    }
   };
 
   const toggleBusinessType = (type: BusinessType) => {

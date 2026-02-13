@@ -50,6 +50,7 @@ export const Onboarding = () => {
             type="text" 
             className="w-full p-4 border rounded-2xl text-xl outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Masalan: Grand Barbershop"
+            value={config.name}
             onChange={(e) => setBusinessConfig({ name: e.target.value })}
           />
           <button onClick={() => setStep(3)} className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold">Davom etish</button>
