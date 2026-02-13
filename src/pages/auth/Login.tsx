@@ -40,7 +40,7 @@ const Login: React.FC = () => {
     }
 
     try {
-      const response = await axios.post('http://verify.lutfulla.uz/auth/request', {
+      const response = await axios.post('https://verify.lutfulla.uz/auth/request', {
         phone: `+998${phone}`
       }, {
         headers: { 'x-project-key': PROJECT_KEY }
@@ -78,7 +78,7 @@ const Login: React.FC = () => {
     if (fullCode.length < 6) return;
 
     try {
-      const response = await axios.post('http://verify.lutfulla.uz/auth/verify', {
+      const response = await axios.post('https://verify.lutfulla.uz/auth/verify', {
         phone: `+998${phone}`,
         code: fullCode
       }, {
